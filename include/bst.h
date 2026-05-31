@@ -2,10 +2,11 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <string>
+#include <vector>
 
 template<typename T>
 class BST {
- public:
+public:
     struct Node {
         T key;
         int count;
@@ -16,7 +17,6 @@ class BST {
 
     BST() : root(nullptr) {}
 
-    // Вставка или увеличение счётчика
     void insert(const T& key) {
         Node** cur = &root;
         while (*cur) {
@@ -32,7 +32,6 @@ class BST {
         *cur = new Node(key);
     }
 
-    // Поиск ключа и возврат Node (нужен для тестов)
     Node* search(const T& key) const {
         Node* cur = root;
         while (cur) {
@@ -47,12 +46,10 @@ class BST {
         return nullptr;
     }
 
-    // Высота дерева
     int depth() const {
         return depth(root);
     }
 
-    // Сбор узлов в порядке возрастания ключей
     void inorder(std::vector<Node*>& nodes) const {
         inorder(root, nodes);
     }
@@ -61,7 +58,7 @@ class BST {
         clear(root);
     }
 
- private:
+private:
     Node* root;
 
     int depth(Node* node) const {
@@ -85,4 +82,4 @@ class BST {
         delete node;
     }
 };
-#endif  // INCLUDE_BST_H_
+#endif
