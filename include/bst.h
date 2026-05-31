@@ -47,7 +47,8 @@ public:
     }
 
     int depth() const {
-        return depth(root);
+        int d = depth(root);
+        return d > 0 ? d - 1 : 0;
     }
 
     void inorder(std::vector<Node*>& nodes) const {
