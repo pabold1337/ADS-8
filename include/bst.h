@@ -32,7 +32,7 @@ public:
         *cur = new Node(key);
     }
 
-    Node* search(const T& key) const {
+    int search(const T& key) const {
         Node* cur = root;
         while (cur) {
             if (key < cur->key) {
@@ -40,10 +40,10 @@ public:
             } else if (key > cur->key) {
                 cur = cur->right;
             } else {
-                return cur;
+                return cur->count;
             }
         }
-        return nullptr;
+        return 0;
     }
 
     int depth() const {
