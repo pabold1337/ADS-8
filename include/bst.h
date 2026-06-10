@@ -1,88 +1,63 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#ifndef BST_H_
+#define BST_H_
 
 #include <string>
 #include <vector>
 
 template<typename T>
 class BST {
- public:
-  struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
-  };
+public:
+    struct Node {
+        T key;
+        int count;
+        Node* left;
+        Node* right;
+        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    };
 
-  BST() : root(nullptr) {}
+private:
+    Node* root;
 
-  void insert(const T& key) {
-    Node** cur = &root;
-    while (*cur) {
-      if (key < (*cur)->key) {
-        cur = &((*cur)->left);
-      } else if (key > (*cur)->key) {
-        cur = &((*cur)->right);
-      } else {
-        (*cur)->count++;
-        return;
-      }
+    void insert(Node*& node, const T& key) {
+        if (node == nullptr) {
+            node = new Node(key);
+        } else if (key < node->key) {
+            insert(node->left, key);
+        } else if (key > node->key) {
+            insert(node->right, key);
+        } else {
+            node->count++;
+        }
     }
-    *cur = new Node(key);
-  }
 
-  int search(const T& key) const {
-    Node* cur = root;
-    while (cur) {
-      if (key < cur->key) {
-        cur = cur->left;
-      } else if (key > cur->key) {
-        cur = cur->right;
-      } else {
-        return cur->count;
-      }
+    void inorder(Node* node, std::vector<Node*>& nodes) const {
+        if (node != nullptr) {
+            inorder(node->left, nodes);
+            nodes.push_back(node);
+            inorder(node->right, nodes);
+        }
     }
-    return 0;
-  }
 
-  int depth() const {
-    int d = depth(root);
-    return d > 0 ? d - 1 : 0;
-  }
+    void clear(Node* node) {
+        if (node != nullptr) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    }
 
-  void inorder(std::vector<Node*>& nodes) const {
-    inorder(root, nodes);
-  }
+public:
+    BST() : root(nullptr) {}
+    ~BST() { clear(root); }
 
-  ~BST() {
-    clear(root);
-  }
+    void insert(const T& key) {
+        insert(root, key);
+    }
 
- private:
-  Node* root;
-
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int leftDepth = depth(node->left);
-    int rightDepth = depth(node->right);
-    return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
-  }
-
-  void inorder(Node* node, std::vector<Node*>& nodes) const {
-    if (!node) return;
-    inorder(node->left, nodes);
-    nodes.push_back(node);
-    inorder(node->right, nodes);
-  }
-
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
+    void inorder(std::vector<Node*>& nodes) const {
+        inorder(root, nodes);
+    }
 };
 
-#endif  // INCLUDE_BST_H_
+#endif  // BST_H_
