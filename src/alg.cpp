@@ -5,7 +5,6 @@
 #include <cctype>
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
